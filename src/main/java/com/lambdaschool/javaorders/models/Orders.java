@@ -8,6 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "orders")
+@JsonIgnoreProperties({"hasordamount", "hasadvanceamount"})
 public class Orders {
 
     @Id
@@ -19,12 +20,19 @@ public class Orders {
     private double advanceamount;
     private String orderdescription;
 
+    @Transient
+    public boolean hasordamount = false;
+
+    @Transient
+    public boolean hasadvanceamount = false;
+
     public Orders(){}
 
-    public Orders(double ordamount, double advanceamount, String orderdescription) {
+    public Orders(double ordamount, double advanceamount, Customers customers, String orderdescription) {
         this.ordamount = ordamount;
         this.advanceamount = advanceamount;
         this.orderdescription = orderdescription;
+        this.customers = customers;
     }
 
     @ManyToOne
@@ -53,6 +61,7 @@ public class Orders {
     }
 
     public void setOrdamount(double ordamount) {
+        hasordamount = true;
         this.ordamount = ordamount;
     }
 
@@ -61,6 +70,7 @@ public class Orders {
     }
 
     public void setAdvanceamount(double advanceamount) {
+        hasadvanceamount = true;
         this.advanceamount = advanceamount;
     }
 
@@ -78,5 +88,21 @@ public class Orders {
 
     public void setPayments(List<Payments> payments) {
         this.payments = payments;
+    }
+
+    public Customers getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(Customers customers) {
+        this.customers = customers;
+    }
+
+    public void addPayments(Payments payments) {
+        payments.getOrders().add(this);
+    }
+
+    public void removePayments(Payments payments) {
+        payments.getOrders().remove(this);
     }
 }

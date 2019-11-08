@@ -27,6 +27,18 @@ public class Customers {
     private double outstandingamt;
     private String phone;
 
+    @Transient
+    public boolean hasopeningamt = false;
+
+    @Transient
+    public boolean hasreceiveamt = false;
+
+    @Transient
+    public boolean haspaymentamt = false;
+
+    @Transient
+    public boolean hasoutstandingamt = false;
+
     @ManyToOne
     @JoinColumn(name = "agentcode",
             nullable = false)
@@ -38,7 +50,7 @@ public class Customers {
 
     public Customers(){}
 
-    public Customers(String custname, String custcity, String workingarea, String custcountry, String grade, double openingamt, double receiveamt, double paymentamt, double outstandingamt, String phone) {
+    public Customers(String custname, String custcity, String workingarea, String custcountry, String grade, double openingamt, double receiveamt, double paymentamt, double outstandingamt, String phone, Agents agents) {
         this.custname = custname;
         this.custcity = custcity;
         this.workingarea = workingarea;
@@ -49,6 +61,7 @@ public class Customers {
         this.paymentamt = paymentamt;
         this.outstandingamt = outstandingamt;
         this.phone = phone;
+        this.agents = agents;
     }
 
     public long getCustcode() {
@@ -104,14 +117,14 @@ public class Customers {
     }
 
     public void setOpeningamt(double openingamt) {
+        hasopeningamt = true;
         this.openingamt = openingamt;
     }
 
-    public double getReceiveamt() {
-        return receiveamt;
-    }
+    public double getReceiveamt() { return receiveamt; }
 
     public void setReceiveamt(double receiveamt) {
+        hasreceiveamt = true;
         this.receiveamt = receiveamt;
     }
 
@@ -120,10 +133,12 @@ public class Customers {
     }
 
     public void setPaymentamt(double paymentamt) {
+        haspaymentamt = true;
         this.paymentamt = paymentamt;
     }
 
     public double getOutstandingamt() {
+        hasoutstandingamt = true;
         return outstandingamt;
     }
 
